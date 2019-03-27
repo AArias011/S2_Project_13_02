@@ -38,18 +38,17 @@ window.onload = init;
 function init() {
       var calcButtons = document.getElementsByClassName("calcButton");
       for (var i = 0; i < calcButtons.length; i++) {
-            calcButtons[i].onClick = buttonClick;
+            calcButtons[i].onclick = buttonClick;
       }
       //Adds functions to key pressed within the calculator window 
-
       document.getElementById("calcWindow").onkeydown = calcKeys;
 }
-//Adds functions to the buttons clicked within the calcutlor
+//Adds functions to the buttons clicked within the calculator
 function buttonClick(e) {
       var calcValue = document.getElementById("calcWindow").value;
       var calcDecimal = document.getElementById("decimals").value;
       var buttonValue = e.target.value;
-
+      //This switch case structure sets the delete, backspace, enter and previous buttons to work that are on the calculator.
       switch (buttonValue) {
             case "del":
                   calcValue = "";
@@ -58,19 +57,40 @@ function buttonClick(e) {
                   calcValue = eraseChar(calcValue);
                   break;
             case "enter":
-                  calcValue = "=" + evalEq(calcValue, calcDecimal) + "\n";
+                  calcValue += " = " + evalEq(calcValue, calcDecimal) + "\n";
                   break;
             case "prev":
-                  calcValue = "=" + lastEq(calcValue) + "\n";
+                  calcValue += " = " + lastEq(calcValue);
                   break;
             default:
+                  calcValue += buttonValue;
                   break;
       }
+
       document.getElementById("calcWindow").value = calcValue;
+      //this puts the cursor focus within the calculator window
       document.getElementById("calcWindow").focus();
 }
-
+//action will happen when the user presses the Delete, Enter, and up arrow keys
 function calcKeys(e) {
+      var calcValue = document.getElementById("calcWindow").value;
+      var calcDecimal = document.getElementById("decimals").value;
+
+      switch (e.key) {
+            case "Delete":
+                  calcValue = "";
+                  break;
+            case "Enter":
+                  calcValue += " = " + evalEq(calcValue, calcDecimal);
+                  break;
+            case "ArrowUp":
+                  calcValue += lastEq(calcWindow.value);
+                  break;
+                  // this prevents the browser from performing the default action in response to the user pressing the up-arrow key
+                  e.preventDefault();
+      }
+
+      document.getElementById("calcWindow").value = calcValue;
 
 }
 
